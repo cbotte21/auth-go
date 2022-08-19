@@ -61,15 +61,20 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 	candideUser := schema.User{
 		Email:            credentials.Get("email"),
 		Username:         credentials.Get("username"),
-		Password:         credentials.Get("password"),
 		InitialTimestamp: strconv.FormatInt(time.Now().Unix(), 10),
+	}
+
+	if !candideUser.SetPassword(credentials.Get("password")) {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("Please try again later.\n"))
+		return
 	}
 
 	status := datastore.Create(candideUser)
 
 	if !status {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("Please try again later. (Could not create account)\n"))
+		w.Write([]byte("Please try again later.\n"))
 		return
 	}
 

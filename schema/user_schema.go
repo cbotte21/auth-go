@@ -1,5 +1,9 @@
 package schema
 
+import (
+	"golang.org/x/crypto/bcrypt"
+)
+
 //user struct
 
 const DATABASE string = "auth"
@@ -22,6 +26,15 @@ func (user User) Collection() string {
 	return COLLECTION
 }
 
+func (user *User) SetPassword(candidePassword string) bool {
+	hash, err := bcrypt.GenerateFromPassword([]byte(candidePassword), 10)
+	if err != nil {
+		return false
+	}
+	user.Password = string(hash)
+	return true
+}
+
 func (user User) VerifyPassword(candidePassword string) bool {
-	return user.Password == candidePassword //Decrypt
+	return bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(candidePassword)) == nil
 }
