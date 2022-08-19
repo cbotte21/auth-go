@@ -6,13 +6,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type Datastore[T schema.Schema[any]] interface {
-	Find(model T) (T, bool)
-	Create(model T) bool
-	Update(model T) T
-	Delete(model T) bool
-}
-
 func Find[T schema.Schema[any]](schema T) (T, bool) {
 	client, status := GetMongoClient()
 	if !status {
