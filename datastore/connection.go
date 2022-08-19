@@ -1,6 +1,3 @@
-//This package is meant to be boilerplate for every service.
-//This is a mongodb wrapper
-
 package datastore
 
 import (
