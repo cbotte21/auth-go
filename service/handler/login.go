@@ -1,12 +1,13 @@
 package handler
 
 import (
-	"github.com/cbotte21/games-auth/datastore"
-	"github.com/cbotte21/games-auth/schema"
+	"github.com/cbotte21/auth-go/datastore"
+	"github.com/cbotte21/auth-go/schema"
+	"github.com/cbotte21/auth-go/utilities"
 	"net/http"
 )
 
-func LoginHandler(w http.ResponseWriter, r *http.Request) {
+func LoginHandler(w http.ResponseWriter, r *http.Request) { //TODO: Update last login
 	err := r.ParseForm() //Populate PostForm
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -26,19 +27,26 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		Email: credentials.Get("email"),
 	}
 
-	candideUser, result := datastore.Find(query)
-	if !result {
+	candideUser, err := datastore.Find(query) //Find user with matching email
+	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("Email does not exist.\n"))
 		return
 	}
 
-	if !candideUser.VerifyPassword(credentials.Get("password")) { //Validate password
+	if candideUser.VerifyPassword(credentials.Get("password")) != nil { //Validate password
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("Username and password do not match."))
 		return
 	}
 
+	tokenString, err := utilities.GenerateJWT(candideUser)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("Please try again later.\n"))
+		return
+	}
+
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("example jwt"))
+	w.Write([]byte(tokenString))
 }

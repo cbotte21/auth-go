@@ -1,6 +1,9 @@
 package handler
 
-import "net/http"
+import (
+	"github.com/cbotte21/auth-go/utilities"
+	"net/http"
+)
 
 func VerifyHandler(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm() //Populate PostForm
@@ -18,8 +21,13 @@ func VerifyHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//TODO: Call jwt validation logic
-
+	//Parse JWT
+	err = utilities.ValidateJWT(payload.Get("jwt"))
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte("Account is unauthorized.\n"))
+		return
+	}
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("Account is authorized."))
 }

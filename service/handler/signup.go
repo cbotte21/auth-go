@@ -1,9 +1,10 @@
 package handler
 
 import (
-	"github.com/cbotte21/games-auth/datastore"
-	"github.com/cbotte21/games-auth/schema"
-	"github.com/cbotte21/games-auth/utilities"
+	"github.com/cbotte21/auth-go/datastore"
+	"github.com/cbotte21/auth-go/schema"
+	"github.com/cbotte21/auth-go/utilities"
+	"go.mongodb.org/mongo-driver/mongo"
 	"net/http"
 	"strconv"
 	"time"
@@ -45,14 +46,14 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//Check if an account already exists with email or username
-	_, result := datastore.Find(emailCheckQuery)
-	if result {
+	_, err = datastore.Find(emailCheckQuery)
+	if err != mongo.ErrNoDocuments {
 		w.WriteHeader(http.StatusConflict)
 		w.Write([]byte("Email is already registered.\n"))
 		return
 	}
-	_, result = datastore.Find(usernameCheckQuery)
-	if result {
+	_, err = datastore.Find(usernameCheckQuery)
+	if err != mongo.ErrNoDocuments {
 		w.WriteHeader(http.StatusConflict)
 		w.Write([]byte("Username is already registered.\n"))
 		return
@@ -64,15 +65,15 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 		InitialTimestamp: strconv.FormatInt(time.Now().Unix(), 10),
 	}
 
-	if !candideUser.SetPassword(credentials.Get("password")) {
+	if candideUser.SetPassword(credentials.Get("password")) != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("Please try again later.\n"))
 		return
 	}
 
-	status := datastore.Create(candideUser)
+	err = datastore.Create(candideUser)
 
-	if !status {
+	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("Please try again later.\n"))
 		return
