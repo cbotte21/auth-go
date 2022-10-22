@@ -2,61 +2,56 @@ package datastore
 
 import (
 	"context"
-	"github.com/cbotte21/games-auth/schema"
-	"go.mongodb.org/mongo-driver/mongo"
+	"github.com/cbotte21/auth-go/schema"
 )
 
-func Find[T schema.Schema[any]](schema T) (T, bool) {
-	client, status := GetMongoClient()
-	if !status {
-		return schema, false
+func Find[T schema.Schema[any]](schema T) (T, error) {
+	client, err := GetMongoClient()
+	if err != nil {
+		return schema, err
 	}
 	var result T
 	collection := client.Database(schema.Database()).Collection(schema.Collection())
-	err := collection.FindOne(context.TODO(), schema).Decode(&result)
+	err = collection.FindOne(context.TODO(), schema).Decode(&result)
 
 	if err != nil {
-		if err != mongo.ErrNoDocuments {
-			panic(err)
-		}
-		return schema, false
+		return schema, err
 	}
-
-	return result, true
+	return result, nil
 }
 
-func Create[T schema.Schema[any]](schema T) bool {
-	client, status := GetMongoClient()
-	if !status {
-		return false
+func Create[T schema.Schema[any]](schema T) error {
+	client, err := GetMongoClient()
+	if err != nil {
+		return err
 	}
 
 	collection := client.Database(schema.Database()).Collection(schema.Collection())
-	_, err := collection.InsertOne(context.TODO(), schema)
+	_, err = collection.InsertOne(context.TODO(), schema)
 
-	return err == nil
+	return err
 }
 
-func Update[X, Y schema.Schema[any]](filter X, updated Y) bool {
-	client, status := GetMongoClient()
-	if !status {
-		return false
+func Update[X, Y schema.Schema[any]](filter X, updated Y) error {
+	client, err := GetMongoClient()
+	if err != nil {
+		return err
 	}
 
 	collection := client.Database(filter.Database()).Collection(filter.Collection())
-	_, err := collection.UpdateOne(context.TODO(), filter, updated)
+	_, err = collection.UpdateOne(context.TODO(), filter, updated)
 
-	return err == nil
+	return err
 }
 
-func Delete[T schema.Schema[any]](schema T) bool {
-	client, status := GetMongoClient()
-	if !status {
-		return false
+func Delete[T schema.Schema[any]](schema T) error {
+	client, err := GetMongoClient()
+	if err != nil {
+		return err
 	}
 
 	collection := client.Database(schema.Database()).Collection(schema.Collection())
-	_, err := collection.DeleteOne(context.TODO(), schema)
+	_, err = collection.DeleteOne(context.TODO(), schema)
 
-	return err == nil
+	return err
 }

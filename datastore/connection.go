@@ -9,21 +9,21 @@ import (
 
 const uri string = "mongodb+srv://root:Asdfasdf1@cluster0.btzdz.mongodb.net/?retryWrites=true&w=majority" //TODO: Pull from env variables
 
-func GetMongoClient() (*mongo.Client, bool) {
+func GetMongoClient() (*mongo.Client, error) {
 	//connect
 	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
 
 	//error check
 	if err != nil {
-		return nil, false
+		return nil, err
 	}
 
 	//ping
 	if err := client.Ping(context.TODO(), readpref.Primary()); err != nil {
 		panic(err)
-		return nil, false
+		return nil, err
 	}
 
 	//return
-	return client, true
+	return client, nil
 }
