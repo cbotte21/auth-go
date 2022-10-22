@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/cbotte21/games-auth/service/handler"
+	"github.com/cbotte21/auth-go/service/handler"
 	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
@@ -20,7 +20,7 @@ func NewApi(port int) (*Api, bool) {
 	return api, true
 }
 
-func (api *Api) Start() error { 
+func (api *Api) Start() error { //maybe change return to bool
 	return http.ListenAndServe(":"+strconv.Itoa(api.port), api.router)
 }
 
