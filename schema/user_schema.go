@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"errors"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -26,15 +27,15 @@ func (user User) Collection() string {
 	return COLLECTION
 }
 
-func (user *User) SetPassword(candidePassword string) bool {
+func (user *User) SetPassword(candidePassword string) error {
 	hash, err := bcrypt.GenerateFromPassword([]byte(candidePassword), 10)
 	if err != nil {
-		return false
+		return errors.New("could not hash password")
 	}
 	user.Password = string(hash)
-	return true
+	return nil
 }
 
-func (user User) VerifyPassword(candidePassword string) bool {
-	return bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(candidePassword)) == nil
+func (user User) VerifyPassword(candidePassword string) error {
+	return bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(candidePassword))
 }
