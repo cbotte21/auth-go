@@ -1,10 +1,14 @@
-//TODO: Abstract api
+/*
+*	Author: Cody Botte
+*	Purpose: An authentication microservice using gorilla/mux. Users saved via mongodb, passwords encrypted using
+* 		 bcrypt, and users identified using json web tokens.
+*/
 
 package main
 
 import (
 	"log"
-	"github.com/cbotte21/games-auth/service"
+	"github.com/cbotte21/auth-go/service"
 )
 
 func main() {
