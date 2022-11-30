@@ -80,5 +80,5 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("account created"))
+	w.Write([]byte(`{ "status": "account created" }`))
 }

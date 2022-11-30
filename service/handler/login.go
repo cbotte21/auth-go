@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"github.com/cbotte21/auth-go/datastore"
 	"github.com/cbotte21/auth-go/schema"
 	"github.com/cbotte21/auth-go/utilities"
@@ -48,5 +49,5 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) { //TODO: Update last 
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(tokenString))
+	w.Write([]byte(fmt.Sprintf(`{ "jwt": "%s" }`, tokenString)))
 }

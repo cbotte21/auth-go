@@ -29,5 +29,5 @@ func VerifyHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Account is authorized."))
+	w.Write([]byte(`{ "status": "account authorized" }`))
 }
