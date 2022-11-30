@@ -2,16 +2,26 @@
 *	Author: Cody Botte
 *	Purpose: An authentication microservice using gorilla/mux. Users saved via mongodb, passwords encrypted using
 * 		 bcrypt, and users identified using json web tokens.
-*/
+ */
 
 package main
 
 import (
-	"log"
+	"fmt"
 	"github.com/cbotte21/auth-go/service"
+	"log"
+	"os"
 )
 
 func main() {
+	//Verify env variables exist
+	_, uriPresent := os.LookupEnv("auth_mongo_uri")
+
+	if !uriPresent {
+		fmt.Println("could not find {mongo_uri} environment variable")
+		os.Exit(1)
+	}
+
 	api, res := service.NewApi(5000)
 	if !res || api.Start() != nil { //Start API Listener
 		log.Fatal("Failed to initialize API.")
