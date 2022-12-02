@@ -9,16 +9,21 @@ package main
 import (
 	"fmt"
 	"github.com/cbotte21/auth-go/service"
+	"github.com/joho/godotenv"
 	"log"
 	"os"
 )
 
 func main() {
 	//Verify env variables exist
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("Could not load enviroment variables!")
+	}
 	_, uriPresent := os.LookupEnv("auth_mongo_uri")
 
 	if !uriPresent {
-		fmt.Println("could not find {mongo_uri} environment variable")
+		fmt.Println("could not find {auth_mongo_uri} environment variable")
 		os.Exit(1)
 	}
 
