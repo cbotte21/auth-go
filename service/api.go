@@ -25,10 +25,12 @@ func (api *Api) Start() error { //maybe change return to bool
 }
 
 func (api *Api) RegisterHandlers() { //Add all API handlers here
-	api.router.HandleFunc("/", handler.IndexHandler).Methods("GET")
+	prefix := "/api"
+
+	api.router.HandleFunc(prefix+"/", handler.IndexHandler).Methods("GET")
 	//User lifecycle
-	api.router.HandleFunc("/login", handler.LoginHandler).Methods("POST")
-	api.router.HandleFunc("/signup", handler.SignupHandler).Methods("POST")
-	api.router.HandleFunc("/verify", handler.VerifyHandler).Methods("POST")
+	api.router.HandleFunc(prefix+"/login", handler.LoginHandler).Methods("POST")
+	api.router.HandleFunc(prefix+"/signup", handler.SignupHandler).Methods("POST")
+	api.router.HandleFunc(prefix+"/verify", handler.VerifyHandler).Methods("POST")
 
 }
