@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/cbotte21/auth-go/internal/utilities"
+	"github.com/cbotte21/auth-go/internal/validator"
 	"github.com/cbotte21/microservice-common/pkg/datastore"
 	"github.com/cbotte21/microservice-common/pkg/schema"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -26,7 +26,7 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !utilities.ParseEmail(credentials.Get("email")) || !utilities.ParsePassword(credentials.Get("password")) { //Validate username and password
+	if !validator.ValidateEmail(credentials.Get("email")) || !validator.ValidatePassword(credentials.Get("password")) { //Validate username and password
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("Email or password does not meet requirements.\n"))
 		return

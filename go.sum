@@ -1,3 +1,5 @@
+github.com/cbotte21/microservice-common v0.0.0-20230316192226-9638d90adda8 h1:iaF2yanj4hjHRyh4lxbvhv0U73tKOFag+/GmDyFZ1Oo=
+github.com/cbotte21/microservice-common v0.0.0-20230316192226-9638d90adda8/go.mod h1:veu4HtaudWBxRpaKSsNrR4biv1n2gu3rT9p6bKg0c84=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

@@ -3,12 +3,12 @@ module github.com/cbotte21/auth-go
 go 1.18
 
 require (
+	github.com/cbotte21/microservice-common v0.0.0-20230316192226-9638d90adda8
 	github.com/gorilla/mux v1.8.0
 	go.mongodb.org/mongo-driver v1.11.2
 )
 
 require (
-	github.com/cbotte21/microservice-common v0.0.0-20230316192226-9638d90adda8 // indirect
 	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
