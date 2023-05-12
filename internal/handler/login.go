@@ -7,6 +7,8 @@ import (
 	"github.com/cbotte21/microservice-common/pkg/schema"
 	"net/http"
 	"os"
+	"strconv"
+	"time"
 )
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) { //TODO: Update last login
@@ -41,6 +43,10 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) { //TODO: Update last 
 		w.Write([]byte("Username and password do not match."))
 		return
 	}
+
+	updatedUser := candideUser
+	updatedUser.RecentTimestamp = strconv.FormatInt(time.Now().Unix(), 10)
+	_ = datastore.Update(candideUser, updatedUser)
 
 	//TODO: Export jwtSecret for increased performence
 	var jwtSecret = jwtParser.JwtSecret(os.Getenv("jwt_secret"))

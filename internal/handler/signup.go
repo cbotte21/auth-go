@@ -49,6 +49,7 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 		Email:            credentials.Get("email"),
 		InitialTimestamp: currTime,
 		RecentTimestamp:  currTime,
+		Role:             0,
 	}
 
 	if candideUser.SetPassword(credentials.Get("password")) != nil {
