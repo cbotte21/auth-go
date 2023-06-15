@@ -6,6 +6,8 @@ import (
 	"os"
 )
 
+var jwtSecret = jwtParser.JwtSecret(os.Getenv("jwt_secret")) 
+
 func VerifyHandler(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm() //Populate PostForm
 	if err != nil {
@@ -23,7 +25,6 @@ func VerifyHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//Parse JWT
-	var jwtSecret = jwtParser.JwtSecret(os.Getenv("jwt_secret")) //TODO: export jwtSecret for increased performance
 	err = jwtSecret.ValidateJWT(payload.Get("jwt"))
 
 	if err != nil {
