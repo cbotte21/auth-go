@@ -36,11 +36,11 @@ func (api *Api) RegisterHandlers() { //Add all API handlers here
 	//User lifecycle
 	api.router.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
 		handler.LoginHandler(w, r, api.userClient, api.jwtSecret)
-	})
+	}).Methods("POST")
 	api.router.HandleFunc("/signup", func(w http.ResponseWriter, r *http.Request) {
 		handler.SignupHandler(w, r, api.userClient)
-	})
+	}).Methods("POST")
 	api.router.HandleFunc("/verify", func(w http.ResponseWriter, r *http.Request) {
 		handler.VerifyHandler(w, r, api.jwtSecret)
-	})
+	}).Methods("POST")
 }
