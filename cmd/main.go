@@ -21,7 +21,7 @@ func main() {
 	//Get port
 	port, err := strconv.Atoi(enviroment.GetEnvVariable("port"))
 	if err != nil {
-		log.Fatalf("could not parse {auth_port} enviroment variable")
+		log.Fatalf("could not parse {port} enviroment variable")
 	}
 	//Start API
 	api, res := service.NewApi(port)
