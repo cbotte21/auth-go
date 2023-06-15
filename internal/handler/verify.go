@@ -1,34 +1,33 @@
 package handler
 
 import (
+	"github.com/cbotte21/microservice-common/pkg/common_errors"
 	"github.com/cbotte21/microservice-common/pkg/jwtParser"
+	"github.com/cbotte21/microservice-common/pkg/validate"
 	"net/http"
-	"os"
 )
 
-func VerifyHandler(w http.ResponseWriter, r *http.Request) {
+func VerifyHandler(w http.ResponseWriter, r *http.Request, jwtSecret *jwtParser.JwtSecret) {
 	err := r.ParseForm() //Populate PostForm
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("Please try again later.\n"))
+		common_errors.InternalServiceError(&w)
 		return
 	}
 
 	payload := r.PostForm
 
-	if !payload.Has("jwt") { //HAS email and password
+	errMsg, validReq := validate.ValidateRequestWithErrorMessage(payload, "jwt")
+	if !validReq {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Request must contain a jwt.\n"))
+		_, _ = w.Write(errMsg)
 		return
 	}
 
 	//Parse JWT
-	var jwtSecret = jwtParser.JwtSecret(os.Getenv("jwt_secret")) //TODO: export jwtSecret for increased performance
 	err = jwtSecret.ValidateJWT(payload.Get("jwt"))
 
 	if err != nil {
-		w.WriteHeader(http.StatusUnauthorized)
-		w.Write([]byte("{ \"status\": \"account not authorized\" }`"))
+		common_errors.AccountNotAuthorizedError(&w)
 		return
 	}
 	w.WriteHeader(http.StatusOK)

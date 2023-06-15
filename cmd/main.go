@@ -8,23 +8,34 @@ package main
 
 import (
 	"github.com/cbotte21/auth-go/internal"
+	"github.com/cbotte21/microservice-common/pkg/datastore"
 	"github.com/cbotte21/microservice-common/pkg/enviroment"
+	"github.com/cbotte21/microservice-common/pkg/jwtParser"
+	"github.com/cbotte21/microservice-common/pkg/schema"
 	"log"
+	"os"
 	"strconv"
 )
 
 func main() {
-	//Verify enviroment variables exist
+	// Verify enviroment variables exist
 	enviroment.VerifyEnvVariable("mongo_uri")
 	enviroment.VerifyEnvVariable("port")
 	enviroment.VerifyEnvVariable("jwt_secret")
-	//Get port
+	// Get port
 	port, err := strconv.Atoi(enviroment.GetEnvVariable("port"))
 	if err != nil {
-		log.Fatalf("could not parse {auth_port} enviroment variable")
+		log.Fatalf("could not parse {port} enviroment variable")
 	}
-	//Start API
-	api, res := service.NewApi(port)
+	// Initialize variables to attach to api
+	jwtSecret := jwtParser.JwtSecret(os.Getenv("jwt_secret"))
+	userClient := datastore.MongoClient[schema.User]{}
+	err = userClient.Init()
+	if err != nil {
+		panic(err)
+	}
+	// Start API
+	api, res := service.NewApi(port, &userClient, &jwtSecret)
 	if !res || api.Start() != nil { //Start API Listener
 		log.Fatal("Failed to initialize API.")
 	}
