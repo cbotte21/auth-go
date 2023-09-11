@@ -20,6 +20,7 @@ import (
 func main() {
 	// Verify enviroment variables exist
 	enviroment.VerifyEnvVariable("mongo_uri")
+	enviroment.VerifyEnvVariable("mongo_db")
 	enviroment.VerifyEnvVariable("port")
 	enviroment.VerifyEnvVariable("jwt_secret")
 	// Get port
