@@ -9,7 +9,7 @@ package main
 import (
 	"github.com/cbotte21/auth-go/internal"
 	"github.com/cbotte21/microservice-common/pkg/datastore"
-	"github.com/cbotte21/microservice-common/pkg/enviroment"
+	"github.com/cbotte21/microservice-common/pkg/environment"
 	"github.com/cbotte21/microservice-common/pkg/jwtParser"
 	"github.com/cbotte21/microservice-common/pkg/schema"
 	"log"
@@ -19,12 +19,12 @@ import (
 
 func main() {
 	// Verify enviroment variables exist
-	enviroment.VerifyEnvVariable("mongo_uri")
-	enviroment.VerifyEnvVariable("mongo_db")
-	enviroment.VerifyEnvVariable("port")
-	enviroment.VerifyEnvVariable("jwt_secret")
+	environment.VerifyEnvVariable("mongo_uri")
+	environment.VerifyEnvVariable("mongo_db")
+	environment.VerifyEnvVariable("port")
+	environment.VerifyEnvVariable("jwt_secret")
 	// Get port
-	port, err := strconv.Atoi(enviroment.GetEnvVariable("port"))
+	port, err := strconv.Atoi(environment.GetEnvVariable("port"))
 	if err != nil {
 		log.Fatalf("could not parse {port} enviroment variable")
 	}
